@@ -36,6 +36,22 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.ArgumentType;
 import net.sourceforge.argparse4j.inf.Namespace;
 
+/**
+ * I convert Revelation data, exported as XML, to KeePass 1.0 XML format. The
+ * generated file can then be imported into KeePass (even version 2.x).
+ * 
+ * Since not all Revelation fields map onto KeePass entry fields, fields that
+ * can not be naturally mapped, will be stored as <i>name = value</i> pairs in the
+ * notes field. These will be appended to what notes may already be present in the
+ * entry.
+ * 
+ * KeePass 2 has more extensive custom field and attachment support. But unfortunately
+ * I can not yet generate a KeePass 2 XML format. For this reason, the name-value pairs
+ * transcribed above may have to be manually moved over to KeePass attributes.
+ * 
+ * @author gerard.fernandes@gmail.com
+ *
+ */
 public class RevelationToKeePassConverter {
 	
 	private static final Logger log = LoggerFactory.getLogger(RevelationToKeePassConverter.class);

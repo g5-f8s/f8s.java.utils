@@ -21,6 +21,11 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
+/**
+ * 
+ * Source code licensed under the GNU GPL v3.0 or later.
+ *
+ */
 public class XmlSpliteratorTest {
 	
 	private static final String emptyXmlDoc = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><root/>";

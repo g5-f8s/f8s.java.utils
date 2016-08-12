@@ -15,6 +15,10 @@ import java.util.NoSuchElementException;
 import org.f8s.g5.util.CircularBuffer;
 import org.junit.Test;
 
+/**
+ * 
+ * Source code licensed under the GNU GPL v3.0 or later. *
+ */
 public class CircularBufferTest {
 
     @Test
