@@ -40,7 +40,6 @@ public class RevelationToKeePassConverter {
 	
 	private static final Logger log = LoggerFactory.getLogger(RevelationToKeePassConverter.class);
 	
-	//-f /run/media/gerry/Gerrys\ Encrypted/Keys/revelation-keys.gerry.xml
 	public static void main(String[] args) throws Exception {
 		ArgumentParser argumentParser = argParser();
 		try {
