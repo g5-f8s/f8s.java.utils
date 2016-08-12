@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<revelationdata version="0.4.14" dataversion="1">
+
+	<entry type="website">
+		<name>Amazon</name>
+		<description>Amazon</description>
+		<updated>1372627707</updated>
+		<notes>dfjwogr
+wfvvw
+wvwrvwrvbwbwb
+wrrgr vwrb</notes>
+		<field id="generic-url">https://www.amazon.co.uk</field>
+		<field id="generic-username">gerard.fernandes@gmail.com</field>
+		<field id="generic-email">gerard.fernandes@gmail.com</field>
+		<field id="generic-password">wewewew</field>
+	</entry>
+
+	<entry type="creditcard">
+		<name>Arti's HSBC Debit Card</name>
+		<description>Arti's HSBC Debit Card</description>
+		<updated>1397073427</updated>
+		<notes></notes>
+		<field id="creditcard-cardtype">Visa</field>
+		<field id="creditcard-cardnumber">4659420515047062</field>
+		<field id="creditcard-expirydate">04/2017</field>
+		<field id="creditcard-ccv">123</field>
+		<field id="generic-pin">1234</field>
+	</entry>
+
+	<entry type="shell">
+		<name>athena-root</name>
+		<description>root account on athena</description>
+		<updated>1404851981</updated>
+		<notes></notes>
+		<field id="generic-hostname">athena</field>
+		<field id="generic-domain"></field>
+		<field id="generic-username">root</field>
+		<field id="generic-password">wewewewe</field>
+	</entry>
+
+	<entry type="generic">
+		<name>CyanogenMod Account</name>
+		<description></description>
+		<updated>1383719422</updated>
+		<notes></notes>
+		<field id="generic-hostname"></field>
+		<field id="generic-username">gerard.fernandes@gmail.com</field>
+		<field id="generic-password">wewewewe</field>
+	</entry>
+
+	<entry type="cryptokey">
+		<name>gerry@OpenWRT-C7</name>
+		<description>SSH key password</description>
+		<updated>1450886929</updated>
+		<notes></notes>
+		<field id="generic-hostname">openwrt-c7</field>
+		<field id="generic-certificate"></field>
+		<field id="generic-keyfile"></field>
+		<field id="generic-password">wewewewe</field>
+	</entry>
+
+</revelationdata>

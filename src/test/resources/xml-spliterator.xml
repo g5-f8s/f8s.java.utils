@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><root>
+<!-- DO NOT FORMAT this file! This is, technically, "well-formed" XML.
+	This format tests edge-cases of the StAX parser where it misreports character events or,
+	skips over alternate children if:
+	1. the end-tag is followed by the next childs start-tag, on the same line
+	2. there is no white space separating the end-tag from the next start-tag.
+ -->
+<group id="1"><child>
+	<subchild>abc</subchild>
+</child><child>
+	<subchild>def</subchild>
+</child></group>
+<group id="2"><child>
+	<subchild>ghi</subchild>
+</child><child>
+	<subchild>klm</subchild>
+</child></group></root>
