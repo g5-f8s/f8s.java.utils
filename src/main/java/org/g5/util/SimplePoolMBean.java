@@ -1,4 +1,4 @@
-package org.f8s.g5.util;
+package org.g5.util;
 
 
 public interface SimplePoolMBean {

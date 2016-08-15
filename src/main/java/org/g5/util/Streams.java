@@ -1,4 +1,4 @@
-package org.f8s.g5.util;
+package org.g5.util;
 
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;

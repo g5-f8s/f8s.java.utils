@@ -1,4 +1,4 @@
-package org.f8s.g5.util;
+package org.g5.util;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.f8s.g5.util.CircularBuffer;
+import org.g5.util.CircularBuffer;
 import org.junit.Test;
 
 /**

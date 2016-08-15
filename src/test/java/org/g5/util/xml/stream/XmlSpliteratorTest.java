@@ -1,4 +1,4 @@
-package org.f8s.g5.util.xml.stream;
+package org.g5.util.xml.stream;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import javax.xml.transform.stream.StreamSource;
 
-import org.f8s.g5.util.xml.stream.XmlSpliterator;
+import org.g5.util.xml.stream.XmlSpliterator;
 import org.jdom2.Element;
 import org.junit.Test;
 

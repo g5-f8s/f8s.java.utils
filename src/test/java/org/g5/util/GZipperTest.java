@@ -1,4 +1,4 @@
-package org.f8s.g5.util;
+package org.g5.util;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import java.io.FileInputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.g5.util.GZipper;
 import org.junit.Test;
 
 public class GZipperTest {

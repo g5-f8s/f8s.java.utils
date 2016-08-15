@@ -1,7 +1,7 @@
-package org.f8s.g5.util;
+package org.g5.util;
 
-import static org.f8s.g5.util.SimplePool.minimumSizedDefaultPool;
-import static org.f8s.g5.util.SimplePool.minimumSizedTimeoutPool;
+import static org.g5.util.SimplePool.minimumSizedDefaultPool;
+import static org.g5.util.SimplePool.minimumSizedTimeoutPool;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.g5.util.SimplePool;
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package org.f8s.g5.pwdmgr.converter;
+package org.g5.pwdmgr.converter;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.f8s.g5.util.Streams;
-import org.f8s.g5.util.xml.stream.XmlSpliterator;
+import org.g5.util.Streams;
+import org.g5.util.xml.stream.XmlSpliterator;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Text;
