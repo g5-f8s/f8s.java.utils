@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Base64;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Stack;
 
 import javax.xml.stream.XMLInputFactory;
@@ -23,8 +24,6 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.StAXStreamBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Optional;
 
 /**
  * I use StAX to process large XML documents and split them up into chunks based on the specified element name.
@@ -49,7 +48,7 @@ public class XmlSpliterator implements Iterator<Element>, Iterable<Element> {
     private final Stack<String> elementStack = new Stack<>();
     private final StreamingXmlElementHandler skippedElementConsumer;
     //temporal cached element - the hasNext() call must find a matching element to be able to handle empty documents
-    private Element selectedElement;
+    private Optional<Element> selectedElement = Optional.empty();
     
     public XmlSpliterator(Source xmlSource, String splitOnElementName) throws XMLStreamException {
         this(XMLInputFactory.newInstance().createXMLStreamReader(xmlSource), splitOnElementName, null);
@@ -66,22 +65,22 @@ public class XmlSpliterator implements Iterator<Element>, Iterable<Element> {
         this.xmlStreamReader = xmlStreamReader;
         Validate.isTrue(isNotEmpty(splitOnElementName), "No split element name specified! Can not continue!");
         this.splitOnElementName = splitOnElementName;
-        this.skippedElementConsumer = Optional.fromNullable(skippedElementConsumer).or(new DefaultSkippedElementConsumer());
+        this.skippedElementConsumer = Optional.ofNullable(skippedElementConsumer).orElse(new DefaultSkippedElementConsumer());
     }
     
     @Override
     public boolean hasNext() {
-        if ( selectedElement == null ){
-            selectedElement = findNextElement();
+        if ( ! selectedElement.isPresent()){
+            selectedElement = Optional.ofNullable(findNextElement());
         }
-        return selectedElement != null;
+        return selectedElement.isPresent();
     }
     
     @Override
     public Element next() {
         if (hasNext()) {
-            Element copy = selectedElement.clone();
-            selectedElement = null;
+            Element copy = selectedElement.get().clone();
+            selectedElement = Optional.empty();
             return copy;
         }
         throw new IllegalStateException("No more elements available! Empty document, or end of stream reached.");
