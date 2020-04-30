@@ -1,20 +1,5 @@
 package org.g5.util.xml.stream;
 
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Base64;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Stack;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.g5.util.GZipper;
@@ -24,6 +9,20 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.StAXStreamBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Base64;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.Stack;
+
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * I use StAX to process large XML documents and split them up into chunks based on the specified element name.
@@ -58,10 +57,10 @@ public class XmlSpliterator implements Iterator<Element>, Iterable<Element> {
         this(XMLInputFactory.newInstance().createXMLStreamReader(xmlSource), splitOnElementName, skippedElementConsumer);
     }
     
-    public XmlSpliterator(XMLStreamReader xmlStreamReader, String splitOnElementName) throws XMLStreamException {
+    public XmlSpliterator(XMLStreamReader xmlStreamReader, String splitOnElementName) {
         this(xmlStreamReader, splitOnElementName, null);
     }
-    public XmlSpliterator(XMLStreamReader xmlStreamReader, String splitOnElementName, StreamingXmlElementHandler skippedElementConsumer) throws XMLStreamException {
+    public XmlSpliterator(XMLStreamReader xmlStreamReader, String splitOnElementName, StreamingXmlElementHandler skippedElementConsumer) {
         this.xmlStreamReader = xmlStreamReader;
         Validate.isTrue(isNotEmpty(splitOnElementName), "No split element name specified! Can not continue!");
         this.splitOnElementName = splitOnElementName;
@@ -70,7 +69,7 @@ public class XmlSpliterator implements Iterator<Element>, Iterable<Element> {
     
     @Override
     public boolean hasNext() {
-        if ( ! selectedElement.isPresent()){
+        if (selectedElement.isEmpty()) {
             selectedElement = Optional.ofNullable(findNextElement());
         }
         return selectedElement.isPresent();
@@ -137,14 +136,10 @@ public class XmlSpliterator implements Iterator<Element>, Iterable<Element> {
     private static final class DefaultSkippedElementConsumer extends StreamingXmlElementHandler {
 
         @Override
-        public void handleStartElementEvent(String elementAsString) {
-            return;
-        }
+        public void handleStartElementEvent(String elementAsString) { }
 
         @Override
-        public void handleEndElementEvent(String elementName) {
-            return;
-        }
+        public void handleEndElementEvent(String elementName) { }
     }
     
     //this is one use-case for this XMLSpliterator - here, a very large 600+ MB XML trade file is processed to extract the uncompressed IDM FVar

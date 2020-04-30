@@ -26,22 +26,23 @@ public class CircularBuffer<E> extends AbstractList<E> {
     private int lastInsertIndex = -1;
     private int nextInsertIndex = 0;
     private final E[] data;
-    
+
     @SuppressWarnings("unchecked")
     public CircularBuffer(int capacity) {
         this.capacity = capacity;
         this.data = (E[]) new Object[this.capacity];
     }
-    
+
+    @Override
     public boolean add(E data) {
         this.data[nextInsertIndex] = data;
         this.lastInsertIndex = this.nextInsertIndex;
-        this.nextInsertIndex = this.nextInsertIndex < (this.capacity-1)?
-                                this.nextInsertIndex+1:0;
-        this.size = this.size < this.capacity? this.size + 1 : this.capacity;
+        this.nextInsertIndex = this.nextInsertIndex < (this.capacity - 1) ?
+            this.nextInsertIndex + 1 : 0;
+        this.size = this.size < this.capacity ? this.size + 1 : this.capacity;
         return true;
     }
-    
+
     /**
      * @return the index at which an element was last inserted.
      */
@@ -110,12 +111,10 @@ public class CircularBuffer<E> extends AbstractList<E> {
             }
         }
         
-        @Override
         public boolean hasNext() {
             return !this.completed;
         }
 
-        @Override
         public E next() {
             checkForCoModification();
             if (hasNext()) {
@@ -129,7 +128,6 @@ public class CircularBuffer<E> extends AbstractList<E> {
             throw new NoSuchElementException();
         }
         
-        @Override
         public void remove() {
             throw new UnsupportedOperationException("This is a read-only iterator! Can not remove items!");
         }

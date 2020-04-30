@@ -1,7 +1,19 @@
 package org.g5.pwdmgr.converter;
 
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.inf.*;
+import org.apache.commons.lang3.StringUtils;
+import org.g5.util.Streams;
+import org.g5.util.xml.stream.XmlSpliterator;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Text;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.StringWriter;
@@ -16,25 +28,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.commons.lang3.StringUtils;
-import org.g5.util.Streams;
-import org.g5.util.xml.stream.XmlSpliterator;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.Text;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.sourceforge.argparse4j.ArgumentParsers;
-import net.sourceforge.argparse4j.inf.Argument;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.ArgumentParserException;
-import net.sourceforge.argparse4j.inf.ArgumentType;
-import net.sourceforge.argparse4j.inf.Namespace;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * I convert Revelation data, exported as XML, to KeePass 1.0 XML format. The
@@ -57,6 +51,7 @@ public class RevelationToKeePassConverter {
 	private static final Logger log = LoggerFactory.getLogger(RevelationToKeePassConverter.class);
 	
 	public static void main(String[] args) throws Exception {
+		long start = System.nanoTime();
 		ArgumentParser argumentParser = argParser();
 		try {
 			Namespace cli = argumentParser.parseArgs(args);
@@ -67,19 +62,22 @@ public class RevelationToKeePassConverter {
 			
 			List<Element> kpEntries = Streams.sequential(revelationDataElements)
 										.map(new RevelationToKPConverterFn())
-										.collect(Collectors.toList());
+					.collect(Collectors.toList());
 			kpRoot.addContent(kpEntries);
 			StringWriter out = new StringWriter();
 			new XMLOutputter(Format.getPrettyFormat()).output(kpXml, out);
 			System.out.println(out.toString());
-			FileWriter writer = new FileWriter(new File(revelationFile.getParentFile(), "keepass.export."+revelationFile.getName()));
+			FileWriter writer = new FileWriter(new File(revelationFile.getParentFile(), "keepass.export." + revelationFile.getName()));
 			new XMLOutputter(Format.getPrettyFormat()).output(kpXml, writer);
 		} catch (ArgumentParserException e) {
 			argumentParser.printHelp();
 			argumentParser.printUsage();
 		} catch (RuntimeException e) {
-			System.out.println("Failed to run conversion - error was: "+e.getMessage());
+			System.out.println("Failed to run conversion - error was: " + e.getMessage());
 			argumentParser.printHelp();
+		} finally {
+			long end = System.nanoTime();
+			log.info("Completed processing in {}ms", (end - start) / 1000000.00);
 		}
 	}
 
@@ -204,7 +202,7 @@ public class RevelationToKeePassConverter {
 	private static final class InputFileArgument implements ArgumentType<File> {
 
 		@Override
-		public File convert(ArgumentParser parser, Argument arg, String value) throws ArgumentParserException {
+		public File convert(ArgumentParser parser, Argument arg, String value) {
 			if (StringUtils.isNotEmpty(value)) {
 				File inputFile = new File(value);
 				if (inputFile.exists()) {

@@ -5,7 +5,19 @@
 	<artifactId>utils</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0</version>
-	<dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit-dep</artifactId>
@@ -57,6 +69,12 @@
 		    <groupId>net.sourceforge.argparse4j</groupId>
 		    <artifactId>argparse4j</artifactId>
 		    <version>0.7.0</version>
-		</dependency>		
-	</dependencies>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>1.5.7</version>
+        </dependency>
+
+    </dependencies>
 </project>
