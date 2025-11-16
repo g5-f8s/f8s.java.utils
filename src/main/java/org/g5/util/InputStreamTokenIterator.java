@@ -1,6 +1,5 @@
 package org.g5.util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
