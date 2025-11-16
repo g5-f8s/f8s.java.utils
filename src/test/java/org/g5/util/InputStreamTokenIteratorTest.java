@@ -55,7 +55,7 @@ public class InputStreamTokenIteratorTest {
                 .map(String::toLowerCase)
                 .collect(Collectors.groupingBy(Function.identity(), //group-by distinct word
                         TreeMap::new,                               //...into a sorted Map
-                        Collectors.counting()));                    //...counting number of time word is seen
+                        Collectors.counting()));                    //...counting occurrences of word
         log.info("\n{}", distinctWordCount.entrySet().stream().map(e -> e.getKey() + ":" + e.getValue() + "\n").collect(Collectors.joining()));
     }
 
