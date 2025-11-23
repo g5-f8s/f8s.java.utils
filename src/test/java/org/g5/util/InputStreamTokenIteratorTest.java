@@ -65,7 +65,7 @@ public class InputStreamTokenIteratorTest {
                 .collect(Collectors.joining(",")) + "]";
     }
 
-    private List<String> expectedWords() {
+    private static List<String> expectedWords() {
         return List.of("The",
                 "first",
                 "model",
