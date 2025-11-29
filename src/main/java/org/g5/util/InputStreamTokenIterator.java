@@ -26,18 +26,16 @@ public class InputStreamTokenIterator implements Iterator<String> {
 
     private final Reader inputStreamReader;
     private final Predicate<Character> selector;
-    private final Predicate<Character> excluder;
     private Character nextChar;
     private StringBuilder currentValue;
 
     public InputStreamTokenIterator(Reader inputStreamReader, Pattern selectorPattern, Character delimiter) {
-        this(inputStreamReader, selectorPattern, Pattern.compile("(" + delimiter + "|\\" + END_ARRAY + "|\\" + START_ARRAY + ")"));
+        this(inputStreamReader, selectorPattern);
     }
 
-    public InputStreamTokenIterator(Reader inputStreamReader, Pattern selectorPattern, Pattern delimiterPattern) {
+    public InputStreamTokenIterator(Reader inputStreamReader, Pattern selectorPattern) {
         this.inputStreamReader = inputStreamReader;
         this.selector = characterSelector(selectorPattern);
-        this.excluder = delimiterPatternExcluder(delimiterPattern);
         this.nextChar = null;
         this.currentValue = new StringBuilder();
     }
@@ -59,7 +57,7 @@ public class InputStreamTokenIterator implements Iterator<String> {
             for (; nextChar != Character.MAX_VALUE; nextChar = (char) inputStreamReader.read()) {
                 if (this.selector.test(nextChar)) {
                     this.currentValue.append(nextChar);
-                } else if (this.excluder.test(nextChar)){
+                } else {
                     nextToken = this.currentValue.toString();
                     nextToken = nextToken.endsWith(".")? nextToken.substring(0, nextToken.length()-1) : nextToken;
                     this.currentValue = new StringBuilder();

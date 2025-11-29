@@ -8,7 +8,13 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -44,7 +50,7 @@ public class InputStreamTokenIteratorTest {
     @Test
     public void shouldIterateOverWords() throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/text-data.txt"))));
-        InputStreamTokenIterator inputStreamTokenIterator = new InputStreamTokenIterator(reader, Pattern.compile("(\\w|'|-|\\.)"), Pattern.compile("\\W"));
+        InputStreamTokenIterator inputStreamTokenIterator = new InputStreamTokenIterator(reader, Pattern.compile("(\\w|'|-|\\.)"));
 
         List<String> words = StreamSupport.stream(Spliterators.spliteratorUnknownSize(inputStreamTokenIterator, Spliterator.ORDERED), false)
                 .toList();
