@@ -1,0 +1,15 @@
+one:
+  config:
+    setting2: "ovl-setting-2"
+  sub-config1:
+    setting1: "ovl-sub-1"
+
+another:
+  config:
+    setting1: &ref1 "ovl-another-1"
+    int-setting: 25
+
+yet-another:
+  config:
+    reference: *ref1
+    setting1: "ovl-yet-another-1"

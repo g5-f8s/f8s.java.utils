@@ -4,7 +4,7 @@ import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.*;
 import org.apache.commons.lang3.StringUtils;
 import org.g5.util.Streams;
-import org.g5.util.xml.stream.XmlSpliterator;
+import org.g5.util.stream.xml.XmlSpliterator;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Text;

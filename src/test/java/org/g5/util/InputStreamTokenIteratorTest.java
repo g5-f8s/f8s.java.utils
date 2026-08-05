@@ -1,7 +1,7 @@
 package org.g5.util;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +24,13 @@ import java.util.stream.StreamSupport;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class InputStreamTokenIteratorTest {
+class InputStreamTokenIteratorTest {
 
     private static final Logger log = LoggerFactory.getLogger(InputStreamTokenIteratorTest.class);
     private static final int TEST_ID_LENGTH = 6;
 
     @Test
-    public void shouldIterateOverTokensInInputStream() throws Exception {
+    void shouldIterateOverTokensInInputStream() throws Exception {
         int numberOfDataItems = 10_000;
         String testData = generateTestData(TEST_ID_LENGTH, numberOfDataItems);
         ByteArrayInputStream testInputStream = new ByteArrayInputStream(testData.getBytes());
@@ -48,7 +48,7 @@ public class InputStreamTokenIteratorTest {
     }
 
     @Test
-    public void shouldIterateOverWords() throws Exception {
+    void shouldIterateOverWords() throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/text-data.txt"))));
         InputStreamTokenIterator inputStreamTokenIterator = new InputStreamTokenIterator(reader, Pattern.compile("(\\w|'|-|\\.)"));
 

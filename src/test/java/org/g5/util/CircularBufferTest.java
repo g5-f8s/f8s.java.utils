@@ -1,19 +1,25 @@
 package org.g5.util;
 
-import org.junit.Test;
 
-import java.util.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 /**
  * Source code licensed under the GNU GPL v3.0 or later. *
  */
-public class CircularBufferTest {
+class CircularBufferTest {
 
   @Test
-  public void ensureCircularBehavior() {
+  void ensureCircularBehavior() {
     CircularBuffer<String> boundedCircularArray = new CircularBuffer<>(5);
     assertThat(boundedCircularArray.size(), is(equalTo(0)));
     boundedCircularArray.add("1");
@@ -48,18 +54,18 @@ public class CircularBufferTest {
     assertThat(boundedCircularArray, contains("3", "4", "5", "6", "7"));
   }
 
-  @Test(expected = IndexOutOfBoundsException.class)
-  public void ensureInvalidIndicesAreHandledCorrectly() {
+  @Test
+  void ensureInvalidIndicesAreHandledCorrectly() {
     CircularBuffer<String> boundedCircularArray = new CircularBuffer<>(1);
     assertThat(boundedCircularArray.size(), is(equalTo(0)));
     boundedCircularArray.add("1");
     assertThat(boundedCircularArray.size(), is(equalTo(1)));
     assertThat(boundedCircularArray.get(0), is(equalTo("1")));
-    boundedCircularArray.get(1);
+    IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> boundedCircularArray.get(1));
   }
 
   @Test
-  public void checkIteratorFailureConditions() {
+  void checkIteratorFailureConditions() {
     CircularBuffer<String> boundedCircularArray = new CircularBuffer<>(5);
     try {
       boundedCircularArray.iterator().next();

@@ -1,10 +1,11 @@
-package org.g5.util.xml.stream;
+package org.g5.util.stream.xml;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import org.hamcrest.MatcherAssert;
 import org.jdom2.Element;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
@@ -14,21 +15,21 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.g5.util.Streams.sequential;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * 
  * Source code licensed under the GNU GPL v3.0 or later.
  *
  */
-public class XmlSpliteratorTest {
+class XmlSpliteratorTest {
 	
 	private static final String emptyXmlDoc = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><root/>";
 
     @Test
-    public void shouldIterateOverElementsCorrectly() throws Exception {
+    void shouldIterateOverElementsCorrectly() throws Exception {
         File sourceFile = new File(getClass().getResource("/xml-spliterator.xml").getFile());
         XmlSpliterator xmlSpliterator = new XmlSpliterator(new StreamSource(sourceFile), "child");
         List<Element> elementList = new ArrayList<>();
@@ -39,7 +40,7 @@ public class XmlSpliteratorTest {
     }
     
     @Test
-    public void shouldPlayWellWithGuavaFunctors() throws Exception {
+    void shouldPlayWellWithGuavaFunctors() throws Exception {
         File sourceFile = new File(getClass().getResource("/xml-spliterator.xml").getFile());
         //1. test counting an iterable
         XmlSpliterator xmlSpliterator = new XmlSpliterator(new StreamSource(sourceFile), "child");
@@ -65,7 +66,7 @@ public class XmlSpliteratorTest {
     //Need to do some more testing against larger data-sets, but it does seem like a better
     //idea to use Guava for these types of transformations
     @Test
-    public void shouldPlayWellWithJava8Functors() throws Exception {
+    void shouldPlayWellWithJava8Functors() throws Exception {
         File sourceFile = new File(getClass().getResource("/xml-spliterator.xml").getFile());
         //1. test counting an iterable
         XmlSpliterator xmlSpliterator = new XmlSpliterator(new StreamSource(sourceFile), "child");
@@ -88,7 +89,7 @@ public class XmlSpliteratorTest {
     }
 
     @Test
-    public void shouldHandleEmptyXmlDoc() throws Exception {
+    void shouldHandleEmptyXmlDoc() throws Exception {
         XmlSpliterator xmlSpliterator = new XmlSpliterator(new StreamSource(new StringReader(emptyXmlDoc)), "child");
         int size = Iterators.size(xmlSpliterator);
         assertThat(size, is(0));

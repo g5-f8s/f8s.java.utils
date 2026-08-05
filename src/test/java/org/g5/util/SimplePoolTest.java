@@ -4,7 +4,7 @@ import static org.g5.util.SimplePool.minimumSizedDefaultPool;
 import static org.g5.util.SimplePool.minimumSizedTimeoutPool;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +14,13 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.g5.util.SimplePool;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-public class SimplePoolTest {
+class SimplePoolTest {
 
     @Test
-    public void shouldCreateAndReturnObjectsCorrectly() throws Exception {
+    void shouldCreateAndReturnObjectsCorrectly() throws Exception {
         SimplePool<String> testStringPool = minimumSizedDefaultPool(2, 3, new Callable<String>() {
             @Override
             public String call() throws Exception {
@@ -52,7 +51,7 @@ public class SimplePoolTest {
     }
     
     @Test
-    public void shouldHandleMultithreadedAccess() throws Exception {
+    void shouldHandleMultithreadedAccess() throws Exception {
         List<String> collectedItems = new ArrayList<>();
         assertThat(collectedItems.size(), is(equalTo(0)));
         SimplePool<String> testStringPool = minimumSizedDefaultPool(2, 5, new Callable<String>() {
@@ -102,7 +101,7 @@ public class SimplePoolTest {
     }
     
     @Test
-    @Ignore
+    @Disabled
     public void shouldHandleMultithreadedAccessWithTimeouts() throws Exception {
         List<String> collectedItems = new ArrayList<>();
         SimplePool<String> testStringPool = minimumSizedTimeoutPool(1, 1, 1, new Callable<String>() {

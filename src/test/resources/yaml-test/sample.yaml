@@ -1,0 +1,17 @@
+one:
+  config:
+    setting1: "base-setting-1"
+    setting2: "base-setting-2"
+  sub-config1:
+    setting1: "base-sub-1"
+    setting2: "base-sub-2"
+another:
+  config:
+    setting1: &ref1 "base-another-1"
+    setting2: "base-another-2"
+    int-setting: 10
+
+yet-another:
+  config:
+    reference: *ref1
+    setting1: "base-yet-another-1"

@@ -1,4 +1,4 @@
-package org.g5.util.xml.stream;
+package org.g5.util.stream.xml;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
