@@ -21,8 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class InputStreamTokenIteratorTest {
 
@@ -43,8 +42,8 @@ class InputStreamTokenIteratorTest {
                 .toList();
 
         log.info("Token-list: {}.", tokenList);
-        assertThat(tokenList.size(), equalTo(numberOfDataItems));
-        assertThat(tokenList, equalTo(Arrays.asList(testData.replaceAll("(\\[|\\])", "").split(","))));
+        assertThat(tokenList.size()).isEqualTo(numberOfDataItems);
+        assertThat(tokenList).isEqualTo(Arrays.asList(testData.replaceAll("(\\[|\\])", "").split(",")));
     }
 
     @Test
@@ -55,7 +54,7 @@ class InputStreamTokenIteratorTest {
         List<String> words = StreamSupport.stream(Spliterators.spliteratorUnknownSize(inputStreamTokenIterator, Spliterator.ORDERED), false)
                 .toList();
         log.info("Token-list: {}.", words);
-        assertThat(words, equalTo(expectedWords()));
+        assertThat(words).isEqualTo(expectedWords());
 
         Map<String, Long> distinctWordCount = words.stream()
                 .map(String::toLowerCase)

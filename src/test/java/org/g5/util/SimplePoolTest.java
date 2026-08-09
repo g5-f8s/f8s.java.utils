@@ -1,10 +1,8 @@
 package org.g5.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.g5.util.SimplePool.minimumSizedDefaultPool;
 import static org.g5.util.SimplePool.minimumSizedTimeoutPool;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,32 +26,32 @@ class SimplePoolTest {
             }
         });
         
-        assertThat(testStringPool.size(), is(equalTo(2)));
-        assertThat(testStringPool.leasedCount(), is(equalTo(0)));
+        assertThat(testStringPool.size()).isEqualTo(2);
+        assertThat(testStringPool.leasedCount()).isEqualTo(0);
         
         String data1 = testStringPool.get();
         String data2 = testStringPool.get();
         
-        assertThat(testStringPool.size(), is(equalTo(0)));
-        assertThat(testStringPool.leasedCount(), is(equalTo(2)));
+        assertThat(testStringPool.size()).isEqualTo(0);
+        assertThat(testStringPool.leasedCount()).isEqualTo(2);
         
         String data3 = testStringPool.get();
-        assertThat(testStringPool.size(), is(equalTo(0)));
-        assertThat(testStringPool.leasedCount(), is(equalTo(3)));
+        assertThat(testStringPool.size()).isEqualTo(0);
+        assertThat(testStringPool.leasedCount()).isEqualTo(3);
         
         testStringPool.yield(data1);
         testStringPool.yield(data2);
         testStringPool.yield(data3);
         
-        assertThat(testStringPool.size(), is(equalTo(3)));
-        assertThat(testStringPool.leasedCount(), is(equalTo(0)));
+        assertThat(testStringPool.size()).isEqualTo(3);
+        assertThat(testStringPool.leasedCount()).isEqualTo(0);
 
     }
     
     @Test
     void shouldHandleMultithreadedAccess() throws Exception {
         List<String> collectedItems = new ArrayList<>();
-        assertThat(collectedItems.size(), is(equalTo(0)));
+        assertThat(collectedItems.size()).isEqualTo(0);
         SimplePool<String> testStringPool = minimumSizedDefaultPool(2, 5, new Callable<String>() {
             @Override
             public String call() throws Exception {
@@ -70,23 +68,23 @@ class SimplePoolTest {
             executorSvc.submit(new PoolUser(testStringPool, collectedItems));
         }
         Thread.sleep(150);//give the executor worker threads a chance to kick-off...
-        assertThat(testStringPool.size(), is(equalTo(0)));
-        assertThat(testStringPool.leasedCount(), is(equalTo(5)));
-        assertThat(collectedItems.size(), is(equalTo(5)));
+        assertThat(testStringPool.size()).isEqualTo(0);
+        assertThat(testStringPool.leasedCount()).isEqualTo(5);
+        assertThat(collectedItems.size()).isEqualTo(5);
         
-        assertThat(executorSvc.getCompletedTaskCount(), is(5L));
-        assertThat(executorSvc.getActiveCount(), is(1));
+        assertThat(executorSvc.getCompletedTaskCount()).isEqualTo(5L);
+        assertThat(executorSvc.getActiveCount()).isEqualTo(1);
         
         testStringPool.yield(collectedItems.remove(0));
         Thread.sleep(50);//give the executor worker thread a chance to continue...
         testStringPool.yield(collectedItems.remove(0));
         
-        assertThat(testStringPool.size(), is(equalTo(1)));
-        assertThat(testStringPool.leasedCount(), is(equalTo(4)));
-        assertThat(collectedItems.size(), is(equalTo(4)));
+        assertThat(testStringPool.size()).isEqualTo(1);
+        assertThat(testStringPool.leasedCount()).isEqualTo(4);
+        assertThat(collectedItems.size()).isEqualTo(4);
         
-        assertThat(executorSvc.getCompletedTaskCount(), is(6L));
-        assertThat(executorSvc.getActiveCount(), is(0));
+        assertThat(executorSvc.getCompletedTaskCount()).isEqualTo(6L);
+        assertThat(executorSvc.getActiveCount()).isEqualTo(0);
         
         executorSvc.shutdown();
         
@@ -94,9 +92,9 @@ class SimplePoolTest {
             testStringPool.yield(collectedItems.remove(0));
         }
         
-        assertThat(testStringPool.size(), is(equalTo(5)));
-        assertThat(testStringPool.leasedCount(), is(equalTo(0)));
-        assertThat(collectedItems.size(), is(equalTo(0)));
+        assertThat(testStringPool.size()).isEqualTo(5);
+        assertThat(testStringPool.leasedCount()).isEqualTo(0);
+        assertThat(collectedItems.size()).isEqualTo(0);
         
     }
     
@@ -113,26 +111,26 @@ class SimplePoolTest {
         collectedItems.add(testStringPool.get());
         Thread worker = new Thread(new PoolUser(testStringPool, collectedItems));
 
-        assertThat(testStringPool.size(), is(equalTo(0)));
-        assertThat(testStringPool.leasedCount(), is(equalTo(1)));
-        assertThat(collectedItems.size(), is(equalTo(1)));
+        assertThat(testStringPool.size()).isEqualTo(0);
+        assertThat(testStringPool.leasedCount()).isEqualTo(1);
+        assertThat(collectedItems.size()).isEqualTo(1);
         
         worker.run();
         Thread.sleep(50);//give the worker thread a chance to kick-off...
         
         testStringPool.yield(collectedItems.remove(0));
         
-        assertThat(testStringPool.size(), is(equalTo(1)));//we've returned 1 instance to the pool...
-        assertThat(testStringPool.leasedCount(), is(equalTo(0)));//0 instances are still leased out...
-        assertThat(collectedItems.size(), is(equalTo(0)));//collected items should be the same as leased
+        assertThat(testStringPool.size()).isEqualTo(1);//we've returned 1 instance to the pool...
+        assertThat(testStringPool.leasedCount()).isEqualTo(0);//0 instances are still leased out...
+        assertThat(collectedItems.size()).isEqualTo(0);//collected items should be the same as leased
         
         while(! collectedItems.isEmpty()) {
             testStringPool.yield(collectedItems.remove(0));
         }
         
-        assertThat(testStringPool.size(), is(equalTo(1)));
-        assertThat(testStringPool.leasedCount(), is(equalTo(0)));
-        assertThat(collectedItems.size(), is(equalTo(0)));
+        assertThat(testStringPool.size()).isEqualTo(1);
+        assertThat(testStringPool.leasedCount()).isEqualTo(0);
+        assertThat(collectedItems.size()).isEqualTo(0);
         
     }
     

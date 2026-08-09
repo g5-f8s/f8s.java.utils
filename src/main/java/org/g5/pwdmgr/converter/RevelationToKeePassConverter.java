@@ -1,9 +1,9 @@
 package org.g5.pwdmgr.converter;
 
-import net.sourceforge.argparse4j.ArgumentParsers;
-import net.sourceforge.argparse4j.inf.*;
 import org.apache.commons.lang3.StringUtils;
 import org.g5.util.Streams;
+import org.g5.util.cli.Argument;
+import org.g5.util.cli.CommandLine;
 import org.g5.util.stream.xml.XmlSpliterator;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -52,42 +52,45 @@ public class RevelationToKeePassConverter {
 	
 	public static void main(String[] args) throws Exception {
 		long start = System.nanoTime();
-		ArgumentParser argumentParser = argParser();
+		CommandLine argumentParser = argParser();
 		try {
-			Namespace cli = argumentParser.parseArgs(args);
-			File revelationFile = cli.get("revelationFile");
+            @SuppressWarnings("rawtypes")
+			List<Argument> parsedArgs = argumentParser.parse(args);
+            if (parsedArgs.isEmpty()) {
+                System.out.println(argumentParser.help());
+                System.exit(1);
+            }
+            @SuppressWarnings("unchecked")
+			File revelationFile = ((Argument<File>)parsedArgs.getFirst()).value();
 			Element kpRoot = new Element("pwlist");
 			Document kpXml = new Document(kpRoot);
 			XmlSpliterator revelationDataElements = new XmlSpliterator(new StreamSource(revelationFile), "entry");
 			
 			List<Element> kpEntries = Streams.sequential(revelationDataElements)
 										.map(new RevelationToKPConverterFn())
-					.collect(Collectors.toList());
+					                    .collect(Collectors.toList());
 			kpRoot.addContent(kpEntries);
 			StringWriter out = new StringWriter();
 			new XMLOutputter(Format.getPrettyFormat()).output(kpXml, out);
 			System.out.println(out.toString());
 			FileWriter writer = new FileWriter(new File(revelationFile.getParentFile(), "keepass.export." + revelationFile.getName()));
 			new XMLOutputter(Format.getPrettyFormat()).output(kpXml, writer);
-		} catch (ArgumentParserException e) {
-			argumentParser.printHelp();
-			argumentParser.printUsage();
+		} catch (IllegalArgumentException e) {
+			argumentParser.help();
 		} catch (RuntimeException e) {
 			System.out.println("Failed to run conversion - error was: " + e.getMessage());
-			argumentParser.printHelp();
+			argumentParser.help();
 		} finally {
 			long end = System.nanoTime();
 			log.info("Completed processing in {}ms", (end - start) / 1000000.00);
 		}
 	}
 
-	private static ArgumentParser argParser() {
-		ArgumentParser argumentParser = ArgumentParsers.newArgumentParser("RevelationToKeePassConverter", true);
-		argumentParser.addArgument("-f", "--file")//switches
-			.dest("revelationFile")//option lookup key - map long options onto the short option key
-			.type(new InputFileArgument())//type converter
-			.required(true)
-			.help("the revelation XML format source file to convert to keepass 1.x format");
+	private static CommandLine argParser() {
+		CommandLine argumentParser = new CommandLine("RevelationToKeePassConverter");
+		argumentParser.addOption("destinationFile", "-f", "--file", "The output file-name",
+                        new InputFileArgument("destinationFile"));//switches
+//			.help("the revelation XML format source file to convert to keepass 1.x format");
 		return argumentParser;
 	}
 	
@@ -199,17 +202,23 @@ public class RevelationToKeePassConverter {
 		return kpPwdEntry;
 	}
 	
-	private static final class InputFileArgument implements ArgumentType<File> {
+	private static final class InputFileArgument implements Function<String, File> {
 
-		@Override
-		public File convert(ArgumentParser parser, Argument arg, String value) {
+        private final String argName;
+
+        private InputFileArgument(String argName) {
+            this.argName = argName;
+        }
+
+        @Override
+		public File apply(String value) {
 			if (StringUtils.isNotEmpty(value)) {
 				File inputFile = new File(value);
 				if (inputFile.exists()) {
 					log.info("Found file on file-system: {}.", value);
 					return inputFile;
 				} else {
-					log.warn("Could not find arg[{}] value - file {} - probably not a file-path. Searching classpath...", arg.textualName(), value);
+					log.warn("Could not find arg[{}] value - file {} - probably not a file-path. Searching classpath...", argName, value);
 					URL inputFileUrl = getClass().getResource(value);
 					if (Objects.nonNull(inputFileUrl)) {
 						inputFile = new File(inputFileUrl.getFile());
@@ -221,7 +230,7 @@ public class RevelationToKeePassConverter {
 
 				}
 			}
-			log.error("Failed to resolve file {} for arg[{}]", value, arg.textualName());
+			log.error("Failed to resolve file {} for arg[{}]", value, argName);
 			throw new IllegalArgumentException("Invalid or nonexistent file - "+value);
 		}
 		

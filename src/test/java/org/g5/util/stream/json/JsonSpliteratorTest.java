@@ -1,7 +1,6 @@
 package org.g5.util.stream.json;
 
 import org.g5.util.NamedParameter;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import tools.jackson.databind.JsonNode;
@@ -22,8 +21,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class JsonSpliteratorTest {
 
@@ -39,9 +37,9 @@ class JsonSpliteratorTest {
 
         List<JsonNode> jsonNodes = jsonSpliterator.stream().toList();
 
-        assertThat(metadata.size(), equalTo(3));
-        assertThat(jsonNodes.size(), equalTo(5));
-        assertThat(metadata.get("rows"), equalTo(jsonNodes.size()));
+        assertThat(metadata.size()).isEqualTo(3);
+        assertThat(jsonNodes.size()).isEqualTo(5);
+        assertThat(metadata.get("rows")).isEqualTo(jsonNodes.size());
     }
 
     @SuppressWarnings("all")

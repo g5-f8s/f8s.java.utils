@@ -3,7 +3,7 @@ package org.g5.util.stream.xml;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
-import org.hamcrest.MatcherAssert;
+import org.assertj.core.api.Assertions;
 import org.jdom2.Element;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +14,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.g5.util.Streams.sequential;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
 
 /**
  * 
@@ -36,7 +34,7 @@ class XmlSpliteratorTest {
         while (xmlSpliterator.hasNext()) {
             elementList.add(xmlSpliterator.next());
         }
-        assertThat(elementList.size(), is(4));
+        assertThat(elementList.size()).isEqualTo(4);
     }
     
     @Test
@@ -45,19 +43,19 @@ class XmlSpliteratorTest {
         //1. test counting an iterable
         XmlSpliterator xmlSpliterator = new XmlSpliterator(new StreamSource(sourceFile), "child");
         int size = Iterators.size(xmlSpliterator);
-        assertThat(size, is(4));
+        assertThat(size).isEqualTo(4);
 
         //2. test building a list from an iterable, then extract element-text from the list
         xmlSpliterator = new XmlSpliterator(new StreamSource(sourceFile), "subchild");
         List<Element> matches = Lists.newArrayList((Iterator<Element>) xmlSpliterator);
-        assertThat(matches.size(), is(4));
+        assertThat(matches.size()).isEqualTo(4);
         List<String> valueList = matches.stream().map(new ElementTextExtractor()).collect(Collectors.toList());
-        assertThat(valueList, containsInAnyOrder("abc", "def", "ghi", "klm"));
+        assertThat(valueList).contains("abc", "def", "ghi", "klm");
 
         //3. test extracting element-text from the iterable directly
         xmlSpliterator = new XmlSpliterator(new StreamSource(sourceFile), "subchild");
         valueList = toXmlContentList(xmlSpliterator);
-        assertThat(valueList, containsInAnyOrder("abc", "def", "ghi", "klm"));
+        assertThat(valueList).contains("abc", "def", "ghi", "klm");
     }
 
     //Java8 functors seem to perform _less_ efficiently than the Guava ones. For this
@@ -72,27 +70,27 @@ class XmlSpliteratorTest {
         XmlSpliterator xmlSpliterator = new XmlSpliterator(new StreamSource(sourceFile), "child");
         //equivalent to the Guava Iterators.size
         long size = sequential(xmlSpliterator).count();
-        assertThat(size, is(4L));
+        assertThat(size).isEqualTo(4L);
 
         //2. test building a list from an iterable, then extracting element-text from the list
         xmlSpliterator = new XmlSpliterator(new StreamSource(sourceFile), "subchild");
         List<Element> matches = sequential(xmlSpliterator).collect(Collectors.toList());
-        assertThat(matches.size(), is(4));
+        assertThat(matches.size()).isEqualTo(4);
         final List<String> valueList = matches.stream().map(new ElementTextExtractor()).collect(Collectors.toList());
-        assertThat(valueList, containsInAnyOrder("abc", "def", "ghi", "klm"));
+        assertThat(valueList).contains("abc", "def", "ghi", "klm");
 
         //3. test iterating and extracting text from the iterable directly
         xmlSpliterator = new XmlSpliterator(new StreamSource(sourceFile), "subchild");
         valueList.clear();
         xmlSpliterator.forEach(e -> valueList.add(e.getTextTrim()));
-        assertThat(valueList, containsInAnyOrder("abc", "def", "ghi", "klm"));
+        assertThat(valueList).contains("abc", "def", "ghi", "klm");
     }
 
     @Test
     void shouldHandleEmptyXmlDoc() throws Exception {
         XmlSpliterator xmlSpliterator = new XmlSpliterator(new StreamSource(new StringReader(emptyXmlDoc)), "child");
         int size = Iterators.size(xmlSpliterator);
-        assertThat(size, is(0));
+        assertThat(size).isEqualTo(0);
     }
 
     private List<String> toXmlContentList(XmlSpliterator xmlSpliterator) {
