@@ -1,6 +1,7 @@
 package org.g5.util.cli;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -32,27 +33,16 @@ public class CommandLine {
 
     private final String commandName;
     private final List<Option<?>> options;
+    private final String description;
 
-    public CommandLine(String commandName) {
+    public static CommandLineBuilder builder() {
+        return new CommandLineBuilder();
+    }
+
+    protected CommandLine(String commandName, List<Option<?>> options, String description) {
         this.commandName = commandName;
-        options = new ArrayList<>();
-    }
-
-    public  <T> void addOption(String name, String shortOpt, String longOpt, String description) {
-        addOption(new Option<>(name, shortOpt, longOpt, description, null));
-    }
-
-    public  void addStringValueOption(String name, String shortOpt, String longOpt, String description) {
-        addOption(new Option<>(name, shortOpt, longOpt, description, Function.identity()));
-
-    }
-
-    public  <T> void addOption(String name, String shortOpt, String longOpt, String description, Function<String, T> valueConverter) {
-        addOption(new Option<>(name, shortOpt, longOpt, description, valueConverter));
-    }
-
-    public <T> void addOption(Option<T> option) {
-        this.options.add(option);
+        this.options = Collections.unmodifiableList(options);
+        this.description = description;
     }
 
     @SuppressWarnings("rawtypes")
@@ -66,7 +56,8 @@ public class CommandLine {
     }
 
     public String help() {
-        return "Usage: " + commandName + ": " + optionsHelpString();
+        String help = "Usage: " + commandName + ": " + optionsHelpString();
+        return Objects.nonNull(description)? description + "\n" + help : help;
     }
 
     @Override

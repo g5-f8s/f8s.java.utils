@@ -1,6 +1,5 @@
 package org.g5.util.cli;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -10,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CommandLineTest {
 
     private static final String EXPECTED_HELP = """
+    A command that presumably does some useful work!
     Usage: command: \n\t-a|--aOption: aOption description <A-OPTION>
     \t-b|--bOption: bOption description
     \t-c|--cOption: cOption description
@@ -45,12 +45,14 @@ class CommandLineTest {
     }
 
     private static CommandLine setupTestCommand() {
-        CommandLine cli = new CommandLine("command");
-        cli.addOption(new Option<>("a-option", "a", "aOption", "aOption description", Integer::parseInt));
-        cli.addOption(new Option<>("b-option", "b", "bOption", "bOption description"));
-        cli.addOption(new Option<>("c-option", "c", "cOption", "cOption description"));
-        cli.addOption(new Option<>("d-option", "d", "dOption", "dOption description", Integer::parseInt));
-        cli.addOption(new Option<>("e-option", "e", "eOption", "eOption description", Integer::parseInt));
+        CommandLine cli = CommandLine.builder().withCommand("command")
+                .withDescription("A command that presumably does some useful work!")
+                .withOption(new Option<>("a-option", "a", "aOption", "aOption description", Integer::parseInt))
+                .withOption(new Option<>("b-option", "b", "bOption", "bOption description"))
+                .withOption(new Option<>("c-option", "c", "cOption", "cOption description"))
+                .withOption(new Option<>("d-option", "d", "dOption", "dOption description", Integer::parseInt))
+                .withOption(new Option<>("e-option", "e", "eOption", "eOption description", Integer::parseInt))
+                .build();
         return cli;
     }
 }

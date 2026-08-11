@@ -87,10 +87,13 @@ public class RevelationToKeePassConverter {
 	}
 
 	private static CommandLine argParser() {
-		CommandLine argumentParser = new CommandLine("RevelationToKeePassConverter");
-		argumentParser.addOption("destinationFile", "-f", "--file", "The output file-name",
-                        new InputFileArgument("destinationFile"));//switches
-//			.help("the revelation XML format source file to convert to keepass 1.x format");
+		CommandLine argumentParser = CommandLine.builder()
+                .withCommand("RevelationToKeePassConverter")
+                .withDescription("the revelation XML format source file to convert to keepass 1.x format")
+                //switches
+                .withOption("destinationFile", "-f", "--file", "The output file-name",
+                        new InputFileArgument("destinationFile"))
+                .build();
 		return argumentParser;
 	}
 	
