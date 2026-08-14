@@ -51,7 +51,7 @@ public class RevelationToKeePassConverter {
 	
 	private static final Logger log = LoggerFactory.getLogger(RevelationToKeePassConverter.class);
 	
-	public static void main(String[] args) throws Exception {
+	static void main(String[] args) throws Exception {
 		long start = System.nanoTime();
 		CommandLine argumentParser = argParser();
 		try {
@@ -72,7 +72,7 @@ public class RevelationToKeePassConverter {
 			kpRoot.addContent(kpEntries);
 			StringWriter out = new StringWriter();
 			new XMLOutputter(Format.getPrettyFormat()).output(kpXml, out);
-			System.out.println(out.toString());
+			System.out.println(out);
 			FileWriter writer = new FileWriter(new File(revelationFile.getParentFile(), "keepass.export." + revelationFile.getName()));
 			new XMLOutputter(Format.getPrettyFormat()).output(kpXml, writer);
 		} catch (IllegalArgumentException e) {
@@ -87,14 +87,13 @@ public class RevelationToKeePassConverter {
 	}
 
 	private static CommandLine argParser() {
-		CommandLine argumentParser = CommandLine.builder()
-                .withCommand("RevelationToKeePassConverter")
-                .withDescription("the revelation XML format source file to convert to keepass 1.x format")
-                //switches
-                .withOption("destinationFile", "-f", "--file", "The output file-name",
-                        new InputFileArgument("destinationFile"))
-                .build();
-		return argumentParser;
+        return CommandLine.builder()
+            .withCommand("RevelationToKeePassConverter")
+            .withDescription("the revelation XML format source file to convert to keepass 1.x format")
+            //switches
+            .withOption("destinationFile", "-f", "--file", "The output file-name",
+            new InputFileArgument("destinationFile"))
+            .build();
 	}
 	
 	private static Element simpleElement(String name, String text) {

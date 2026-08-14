@@ -30,7 +30,7 @@ public class Arguments extends AbstractCollection<Argument<?>> {
         return argumentLookupMap.size();
     }
 
-    private Argument findArgumentFor(String shortOrLongOpt) {
+    private Argument<?> findArgumentFor(String shortOrLongOpt) {
         return this.argumentLookupMap.entrySet().stream()
                 .filter(entry -> entry.getKey().shortOpt().equals(shortOrLongOpt) || entry.getKey().longOpt().equals(shortOrLongOpt))
                 .findFirst()

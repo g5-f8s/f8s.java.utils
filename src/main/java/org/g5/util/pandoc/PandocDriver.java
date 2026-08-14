@@ -66,12 +66,12 @@ public class PandocDriver {
 
         String sourceDirUri = (String) arguments.get(SHORT_OPT_SRC).value();
         URI baseDirUri = Optional.ofNullable(sourceDirUri)
-                .map(s -> Paths.get(sourceDirUri))
+                .map(Paths::get)
                 .map(Path::toUri)
                 .orElseThrow(() -> new IllegalArgumentException("No dir found: %s".formatted(sourceDirUri)));
         String targetDir = (String) arguments.get(SHORT_OPT_OUTPUT).value();
         File targetFile = Optional.ofNullable(targetDir)
-                .map(s -> Paths.get(targetDir))
+                .map(Paths::get)
                 .map(Path::toFile).orElseThrow();
         targetFile.mkdirs();
 
@@ -120,7 +120,7 @@ public class PandocDriver {
             List<String> argLine = List.of("--" + arg.option().longOpt(),
                     Optional.ofNullable(arg.value()).map(Objects::toString).orElse(""));
             if ("s".equals(arg.option().shortOpt())) {
-                return List.of("" + arg.value() + "/" + mdFile.getName());
+                return List.of(arg.value() + "/" + mdFile.getName());
             } else if ("o".equals(arg.option().shortOpt())) {
                 return List.of("--" + arg.longOpt(),
                         arg.value() + "/" + mdFile.getName().replaceAll("\\.md", ".html"));

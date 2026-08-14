@@ -44,7 +44,7 @@ class CommandLineTest {
     }
 
     private static CommandLine setupTestCommand() {
-        CommandLine cli = CommandLine.builder().withCommand("command")
+        return CommandLine.builder().withCommand("command")
                 .withDescription("A command that presumably does some useful work!")
                 .withOption(new Option<>("a-option", "a", "aOption", "aOption description", Integer::parseInt))
                 .withOption(new Option<>("b-option", "b", "bOption", "bOption description"))
@@ -52,6 +52,5 @@ class CommandLineTest {
                 .withOption(new Option<>("d-option", "d", "dOption", "dOption description", Integer::parseInt))
                 .withOption(new Option<>("e-option", "e", "eOption", "eOption description", Integer::parseInt))
                 .build();
-        return cli;
     }
 }
