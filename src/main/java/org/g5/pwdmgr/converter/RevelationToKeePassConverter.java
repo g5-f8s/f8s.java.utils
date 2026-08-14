@@ -3,6 +3,7 @@ package org.g5.pwdmgr.converter;
 import org.apache.commons.lang3.StringUtils;
 import org.g5.util.Streams;
 import org.g5.util.cli.Argument;
+import org.g5.util.cli.Arguments;
 import org.g5.util.cli.CommandLine;
 import org.g5.util.stream.xml.XmlSpliterator;
 import org.jdom2.Document;
@@ -54,14 +55,13 @@ public class RevelationToKeePassConverter {
 		long start = System.nanoTime();
 		CommandLine argumentParser = argParser();
 		try {
-            @SuppressWarnings("rawtypes")
-			List<Argument> parsedArgs = argumentParser.parse(args);
+			Arguments parsedArgs = argumentParser.parse(args);
             if (parsedArgs.isEmpty()) {
                 System.out.println(argumentParser.help());
                 System.exit(1);
             }
             @SuppressWarnings("unchecked")
-			File revelationFile = ((Argument<File>)parsedArgs.getFirst()).value();
+			File revelationFile = ((Argument<File>)parsedArgs.get("f")).value();
 			Element kpRoot = new Element("pwlist");
 			Document kpXml = new Document(kpRoot);
 			XmlSpliterator revelationDataElements = new XmlSpliterator(new StreamSource(revelationFile), "entry");

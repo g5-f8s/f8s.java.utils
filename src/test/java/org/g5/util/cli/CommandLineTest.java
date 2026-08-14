@@ -23,8 +23,7 @@ class CommandLineTest {
 
         CommandLine cli = setupTestCommand();
 
-        @SuppressWarnings("rawtypes")
-        List<Argument> arguments = cli.parse(commandLine);
+        Arguments arguments = cli.parse(commandLine);
 
         assertThat(arguments.size()).isEqualTo(5);
 
@@ -39,7 +38,7 @@ class CommandLineTest {
 
         String[] commandLine = new String[0];
 
-        List<Argument> argumentList = cli.parse(commandLine);
+        Arguments argumentList = cli.parse(commandLine);
 
         assertThat(argumentList).isEmpty();
     }

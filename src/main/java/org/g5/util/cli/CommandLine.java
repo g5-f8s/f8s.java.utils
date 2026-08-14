@@ -28,8 +28,8 @@ import static java.util.Collections.unmodifiableList;
  */
 public class CommandLine {
 
-    private static final Pattern SHORT_OPT_PATTERN = Pattern.compile("-([a-z]+)\\s+(.*?)(\\s|$)");
-    private static final Pattern LONG_OPT_PATTERN = Pattern.compile("--([a-z]-)+\\s+(.*?)(\\s|$)");
+    private static final Pattern SHORT_OPT_PATTERN = Pattern.compile("-([a-z]+)(\\s+(.*?)(\\s|$))?");
+    private static final Pattern LONG_OPT_PATTERN = Pattern.compile("--([a-z]+)(\\s+(.*?)(\\s|$))?");
 
     private final String commandName;
     private final List<Option<?>> options;
@@ -45,14 +45,13 @@ public class CommandLine {
         this.description = description;
     }
 
-    @SuppressWarnings("rawtypes")
-    public List<Argument> parse(String... cmdArgs) {
+    public Arguments parse(String... cmdArgs) {
         String fullArgsLine = String.join(" ", cmdArgs);
 
-        return Stream.concat(
+        return new Arguments(Stream.concat(
                     handleShortOpts(fullArgsLine).stream(),
                     handleLongOpts(fullArgsLine).stream())
-                .toList();
+                .toList());
     }
 
     public String help() {
@@ -76,12 +75,12 @@ public class CommandLine {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private List<Argument> handleLongOpts(String fullArgsLine) {
+    private List<Argument<?>> handleLongOpts(String fullArgsLine) {
         Matcher longOptMatcher = LONG_OPT_PATTERN.matcher(fullArgsLine);
-        List<Argument> parsedArguments = new ArrayList<>();
+        List<Argument<?>> parsedArguments = new ArrayList<>();
         while(longOptMatcher.find()) {
             String longOpt = longOptMatcher.group(1);
-            String value = longOptMatcher.group(2);
+            String value = longOptMatcher.group(3);
             Option<?> option = getOption(longOpt);
             if (option.requiresArgument()) {
                 parsedArguments.add(new Argument(option, option.convert(value)));
@@ -93,12 +92,12 @@ public class CommandLine {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private List<Argument> handleShortOpts(String fullArgsLine) {
+    private List<Argument<?>> handleShortOpts(String fullArgsLine) {
         Matcher shortOptMatcher = SHORT_OPT_PATTERN.matcher(fullArgsLine);
-        List<Argument> parsedArgs = new ArrayList<>();
+        List<Argument<?>> parsedArgs = new ArrayList<>();
         while (shortOptMatcher.find()) {
             String possibleMultiOpt = shortOptMatcher.group(1);
-            String value = shortOptMatcher.group(2);
+            String value = shortOptMatcher.group(3);
             if (possibleMultiOpt.length() > 1) {
                 char[] shortOpts = new char[possibleMultiOpt.length()];
                 possibleMultiOpt.getChars(0, possibleMultiOpt.length(), shortOpts, 0);
