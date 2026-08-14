@@ -6,18 +6,7 @@
 	<artifactId>utils</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>25</source>
-                    <target>25</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+
     <properties>
         <logback.version>1.6.1</logback.version>
         <junit.version>6.1.2</junit.version>
@@ -28,13 +17,48 @@
         <slf4j.version>2.0.18</slf4j.version>
         <commons.io.version>2.22.0</commons.io.version>
         <guava.version>33.6.0-jre</guava.version>
-        <commons.cli.version>1.11.0</commons.cli.version>
+        <dns.java.version>3.6.2</dns.java.version>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>26</source>
+                    <target>26</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.g5.util.pandoc.PandocDriver</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
 		<dependency>
 			<groupId>dnsjava</groupId>
 			<artifactId>dnsjava</artifactId>
-			<version>3.6.2</version>
+			<version>${dns.java.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jdom</groupId>
